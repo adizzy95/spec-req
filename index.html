@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Special Message for Mon Bebe 💖</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:ital,wght@0,400;0,600;1,400&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Rouge+Script&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       CSS VARIABLES & RESET
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink-light:  #fff0f3;
+      --pink-mid:    #ffb3c6;
+      --pink-deep:   #e05780;
+      --red-soft:    #ff4d6d;
+      --gold:        #c9a84c;
+      --gold-light:  #f5d987;
+      --cream:       #fffbf0;
+      --text-dark:   #4a1942;
+      --text-body:   #6b3a63;
+      --white:       #ffffff;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow-x: hidden;
+      background: linear-gradient(135deg, #fff0f3 0%, #ffe4ec 40%, #ffd6e0 70%, #ffe9d0 100%);
+      font-family: 'Nunito', sans-serif;
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+
+    /* ============================================================
+       FLOATING HEARTS BACKGROUND
+    ============================================================ */
+    #hearts-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .float-heart {
+      position: absolute;
+      bottom: -60px;
+      font-size: 1.4rem;
+      opacity: 0;
+      animation: floatUp linear infinite;
+    }
+
+    @keyframes floatUp {
+      0%   { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
+      10%  { opacity: 0.7; }
+      90%  { opacity: 0.4; }
+      100% { transform: translateY(-110vh) rotate(25deg) scale(1.2); opacity: 0; }
+    }
+
+    /* ============================================================
+       MAIN LAYOUT
+    ============================================================ */
+    #app {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    /* ============================================================
+       SECTION 1 — ENVELOPE
+    ============================================================ */
+    #envelope-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    #envelope-section.hide {
+      opacity: 0;
+      transform: scale(0.85);
+      pointer-events: none;
+    }
+
+    .envelope-wrap {
+      position: relative;
+      width: 260px;
+      height: 180px;
+      cursor: pointer;
+      filter: drop-shadow(0 8px 32px rgba(224, 87, 128, 0.35));
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+
+    .envelope-wrap:hover {
+      transform: scale(1.05) translateY(-4px);
+      filter: drop-shadow(0 14px 40px rgba(224, 87, 128, 0.5));
+    }
+
+    /* Envelope body */
+    .env-body {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 80%;
+      background: linear-gradient(160deg, #fff0f3, #ffd6e7);
+      border-radius: 4px 4px 12px 12px;
+      border: 2px solid var(--pink-mid);
+      overflow: hidden;
+    }
+
+    /* Envelope back flap (bottom triangle) */
+    .env-body::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 100%;
+      background:
+        linear-gradient(135deg, #ffb3c6 50%, transparent 50%),
+        linear-gradient(225deg, #ffb3c6 50%, transparent 50%);
+      background-size: 50% 60%;
+      background-position: left bottom, right bottom;
+      background-repeat: no-repeat;
+    }
+
+    /* Envelope top flap */
+    .env-flap {
+      position: absolute;
+      top: 0; left: 0;
+      width: 0; height: 0;
+      border-left: 130px solid transparent;
+      border-right: 130px solid transparent;
+      border-top: 90px solid #ffccd5;
+      transform-origin: top center;
+      transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 4;
+    }
+
+    .envelope-wrap.open .env-flap {
+      transform: rotateX(180deg);
+    }
+
+    /* Heart seal */
+    .env-seal {
+      position: absolute;
+      top: 58px; left: 50%;
+      transform: translateX(-50%);
+      font-size: 2rem;
+      z-index: 5;
+      transition: opacity 0.4s ease;
+    }
+
+    .envelope-wrap.open .env-seal {
+      opacity: 0;
+    }
+
+    /* Letter inside envelope */
+    .env-letter {
+      position: absolute;
+      bottom: 10px; left: 50%;
+      transform: translateX(-50%) translateY(0);
+      width: 82%;
+      height: 85%;
+      background: var(--cream);
+      border-radius: 4px;
+      border: 1px solid #f5c2d0;
+      z-index: 3;
+      transition: transform 0.9s cubic-bezier(0.23, 1, 0.32, 1) 0.3s;
+      box-shadow: 0 2px 12px rgba(224, 87, 128, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+
+    .envelope-wrap.open .env-letter {
+      transform: translateX(-50%) translateY(-160px);
+    }
+
+    /* ============================================================
+       ENVELOPE TAGLINE
+    ============================================================ */
+    .envelope-tagline {
+      text-align: center;
+      max-width: 420px;
+    }
+
+    .envelope-tagline h1 {
+      font-family: "Rouge Script", cursive;
+  font-weight: 600;
+  font-style: normal;
+      font-size: clamp(1rem, 300vw, 2.5rem);
+      color: var(--pink-deep);
+      line-height: 1.2;
+      text-shadow: 0 2px 8px rgba(224,87,128,0.2);
+    }
+
+    .envelope-tagline p {
+      font-size: 1rem;
+      color: var(--text-body);
+      margin-top: 0.6rem;
+      font-style: italic;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.6; }
+    }
+
+    /* ============================================================
+       SECTION 2 — LETTER PAPER
+    ============================================================ */
+    #letter-section {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      animation: fadeSlideIn 0.8s ease forwards;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    #letter-section.show { display: flex; }
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .letter-paper {
+      background: linear-gradient(170deg, #fffdf7, #fff5f8);
+      border: 1.5px solid #f5c2d0;
+      border-radius: 12px;
+      padding: 2.5rem 2rem;
+      box-shadow:
+        0 4px 30px rgba(224,87,128,0.15),
+        0 1px 0 #fff inset,
+        0 -1px 0 #f5c2d0 inset;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative lines like real letter paper */
+    .letter-paper::before {
+      content: '';
+      position: absolute;
+      left: 2.5rem;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 34px,
+        #ffd6e0 34px,
+        #ffd6e0 35px
+      );
+      opacity: 0.5;
+    }
+
+    .letter-header {
+      font-family: "Rouge Script", cursive;
+  font-weight: 400;
+  font-style: normal;
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      color: var(--pink-deep);
+      text-align: center;
+      margin-bottom: 1.2rem;
+      line-height: 1.2;
+    }
+
+    .letter-body {
+      font-family: 'Lora', serif;
+      font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+      color: var(--text-body);
+      line-height: 1.9;
+      text-align: justify;
+    }
+
+    .letter-body p { margin-bottom: 1rem; }
+
+    .letter-question {
+      font-family: "Rouge Script", cursive;
+  font-weight: 400;
+  font-style: normal;
+      font-size: clamp(1.5rem, 5vw, 2.1rem);
+      color: var(--red-soft);
+      text-align: center;
+      margin-top: 1.2rem;
+      animation: heartbeat 1.6s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      14%       { transform: scale(1.05); }
+      28%       { transform: scale(1); }
+      42%       { transform: scale(1.03); }
+      70%       { transform: scale(1); }
+    }
+
+    .letter-decor {
+      text-align: right;
+      font-family: 'Great Vibes', cursive;
+      color: var(--gold);
+      font-size: 1.3rem;
+      margin-top: 1.2rem;
+    }
+
+    /* ============================================================
+       SECTION 3 — BUTTONS
+    ============================================================ */
+    .btn-row {
+      display: flex;
+      gap: 0.8rem;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+      width: 100%;
+    }
+
+    @media (min-width: 640px) {
+      .btn-row {
+        gap: 1.5rem;
+      }
+    }
+
+    .btn {
+      padding: 0.7rem 1.6rem;
+      font-size: 0.95rem;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 600;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      letter-spacing: 0.03em;
+    }
+
+    @media (min-width: 640px) {
+      .btn {
+        padding: 0.85rem 2.2rem;
+        font-size: 1.1rem;
+      }
+    }
+
+    .btn-yes {
+      background: linear-gradient(135deg, var(--pink-deep), var(--red-soft));
+      color: #fff;
+      box-shadow: 0 4px 18px rgba(224,87,128,0.45);
+    }
+
+    .btn-yes:hover {
+      transform: scale(1.07) translateY(-2px);
+      box-shadow: 0 8px 28px rgba(224,87,128,0.6);
+    }
+
+    .btn-yes:active { transform: scale(0.97); }
+
+    .btn-no {
+      background: linear-gradient(135deg, #f9e4ec, #ffc4d6);
+      color: var(--pink-deep);
+      box-shadow: 0 4px 14px rgba(224,87,128,0.2);
+      position: static;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .btn-no:hover {
+      transform: scale(1.04);
+    }
+
+    .btn-no.dodging {
+      position: fixed;
+      transition: left 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  top  0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  transform 0.2s ease,
+                  box-shadow 0.2s ease;
+    }
+
+    /* Playful "no" text shown near button */
+    #no-taunt {
+      position: fixed;
+      font-size: clamp(0.75rem, 2.5vw, 1rem);
+      color: var(--pink-deep);
+      font-style: italic;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s;
+      font-family: 'Lora', serif;
+      background: rgba(255,255,255,0.9);
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      border: 1px solid #ffb3c6;
+      white-space: nowrap;
+      z-index: 101;
+    }
+
+    #no-taunt.show { opacity: 1; }
+
+    /* ============================================================
+       MODAL / POPUP
+    ============================================================ */
+    #modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 220, 230, 0.55);
+      backdrop-filter: blur(6px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    #modal-overlay.show { display: flex; }
+
+    .modal-box {
+      background: linear-gradient(160deg, #fff0f5, #fffdf0);
+      border: 2px solid var(--pink-mid);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(224,87,128,0.35);
+      animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.5); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+
+    .modal-emoji { font-size: 3.5rem; margin-bottom: 0.8rem; }
+
+    .modal-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2rem, 6vw, 3rem);
+      color: var(--pink-deep);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .modal-body {
+      font-family: 'Lora', serif;
+      font-size: 1rem;
+      color: var(--text-body);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-close {
+      padding: 0.7rem 2rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: #5a3600;
+      border: none;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      box-shadow: 0 4px 14px rgba(201,168,76,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-close:hover {
+      transform: scale(1.06) translateY(-2px);
+      box-shadow: 0 8px 22px rgba(201,168,76,0.55);
+    }
+
+    /* ============================================================
+       CONFETTI CANVAS
+    ============================================================ */
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 99;
+    }
+
+    /* ============================================================
+       MUSIC NOTE HINT
+    ============================================================ */
+    #music-hint {
+      position: fixed;
+      bottom: 1rem; right: 1rem;
+      background: rgba(255,255,255,0.75);
+      border: 1px solid var(--pink-mid);
+      border-radius: 50px;
+      padding: 0.4rem 1rem;
+      font-size: 0.8rem;
+      color: var(--text-body);
+      backdrop-filter: blur(4px);
+      z-index: 10;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    #music-hint:hover { background: rgba(255,255,255,0.95); }
+
+    /* ============================================================
+       RESPONSIVE (Mobile-first)
+    ============================================================ */
+    /* Base mobile styles are set above */
+    
+    @media (min-width: 640px) {
+      #app {
+        padding: 2rem 1rem;
+      }
+      .envelope-wrap {
+        width: 260px;
+        height: 180px;
+      }
+      .env-flap {
+        border-left-width: 130px;
+        border-right-width: 130px;
+        border-top-width: 90px;
+      }
+      .env-seal {
+        top: 58px;
+        font-size: 2rem;
+      }
+      .envelope-wrap.open .env-letter {
+        transform: translateX(-50%) translateY(-160px);
+      }
+      .letter-paper {
+        padding: 2.5rem 2rem;
+      }
+      .letter-paper::before {
+        left: 2.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     FLOATING HEARTS BACKGROUND
+============================================================ -->
+<div id="hearts-bg"></div>
+
+
+
+<!-- Confetti canvas -->
+<canvas id="confetti-canvas"></canvas>
+
+<!-- ============================================================
+     MAIN APP
+============================================================ -->
+<div id="app">
+
+  <!-- SECTION 1: ENVELOPE -->
+  <section id="envelope-section">
+    <div class="envelope-wrap" id="envelope" onclick="openEnvelope()">
+      <div class="env-flap"></div>
+      <div class="env-seal">💖</div>
+      <div class="env-letter">💌</div>
+      <div class="env-body"></div>
+    </div>
+
+    <div class="envelope-tagline">
+      <h1>A Very Special Request for You</h1>
+      <p>The One who I hold dear to my Heart 💖<br>Click on the envelope to See Request ❤️</p>
+    </div>
+  </section>
+
+  <!-- SECTION 2 & 3: LETTER + BUTTONS -->
+  <section id="letter-section">
+    <div class="letter-paper">
+      <div class="letter-header">Hey Mon Bebe 💕</div>
+
+      <div class="letter-body">
+        <p>
+          There are moments in life when words feel too small for what the heart wants to say and yet,
+          here I am, trying my best, because you deserve to know just how much you mean to me.
+        </p>
+        <p>
+          From The first moment we had together, the whole vibe felt like a gift I didn't know I deserved. Your smiles were the kind that made me want to stay in that moment forever.
+        </p>
+        <p>
+          I don't take for granted how rare you are. And I know I'd regret it forever if I didn't
+          look you in the eyes or at least in your heart and tell you exactly how I feel.
+        </p>
+        <p>
+          Life feels like an incomplete UI without U in it, So I have got a Special question Just for You
+        <strong> Mon Bebe</strong>
+        </p>
+
+        <div class="letter-question">
+          Will you let me design a future
+        together with you and be <strong>Mine</strong>?
+        </div>
+
+        <div class="letter-decor">— With all my heart 🌹</div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: BUTTONS -->
+    <div class="btn-row" id="btn-row">
+      <button class="btn btn-yes" onclick="handleYes()">Yes 💖</button>
+      <button class="btn btn-no" id="btn-no" onmouseenter="dodgeNo()" onclick="dodgeNo()">No 😅</button>
+    </div>
+  </section>
+
+</div><!-- /#app -->
+
+<!-- ============================================================
+     MODAL POPUP
+============================================================ -->
+<div id="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-emoji">🎉💖🎊</div>
+    <div class="modal-title">Yay! She Said Yes!</div>
+    <div class="modal-body">
+      You just made me the happiest person alive ❤️<br><br>
+      <em>Mon Bebe</em>, Now Let’s
+        make it UI/UX (U and I over Ur eX)! 💖🌹
+    </div>
+    <button class="btn-close" onclick="closeModal()">Close 💕</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     AUDIO 
+============================================================ -->
+<audio id="bg-music" loop preload="none">
+  <source src="/your_type.mp3" type="audio/mpeg" />
+</audio>
+
+<div id="no-taunt"></div>
+
+<script>
+/* ============================================================
+   CONFIG 
+============================================================ */
+const TELEGRAM_BOT_TOKEN = '8623302607:AAHxsdXc3786sHB8AO3kATT-HG4dH5T9nr4';
+const TELEGRAM_CHAT_ID   = '6083127011';
+
+/* ============================================================
+   FLOATING HEARTS BACKGROUND
+============================================================ */
+(function spawnHearts() {
+  const container = document.getElementById('hearts-bg');
+  const emojis = ['❤️', '💖', '💗', '💓', '💕', '🌹', '✨', '💝'];
+  const count = 22;
+
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('span');
+    el.className = 'float-heart';
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+    const left     = Math.random() * 100;
+    const duration = 8 + Math.random() * 12;  // 8–20s
+    const delay    = Math.random() * 15;       // stagger start
+    const size     = 0.9 + Math.random() * 1.2;
+
+    el.style.cssText = `
+      left: ${left}%;
+      font-size: ${size}rem;
+      animation-duration: ${duration}s;
+      animation-delay: ${delay}s;
+    `;
+
+    container.appendChild(el);
+  }
+})();
+
+/* ============================================================
+   ENVELOPE OPEN
+============================================================ */
+function openEnvelope() {
+  const env = document.getElementById('envelope');
+  const envSection = document.getElementById('envelope-section');
+  const letterSection = document.getElementById('letter-section');
+
+  // Animate envelope open
+  env.classList.add('open');
+
+  // After envelope animation, transition to letter
+  setTimeout(() => {
+    envSection.classList.add('hide');
+    setTimeout(() => {
+      envSection.style.display = 'none';
+      letterSection.classList.add('show');
+
+      // Position "No" button after letter is shown
+      positionNoBtn();
+    }, 600);
+  }, 1200);
+}
+
+
+
+/* ============================================================
+   POSITION "NO" BUTTON (fixed, random-ish starting spot)
+============================================================ */
+function positionNoBtn() {
+  const btn = document.getElementById('btn-no');
+  // No need to position initially - it stays in flow with buttons
+  // Positioning happens in dodgeNo() when user interacts
+}
+
+/* ============================================================
+   "NO" BUTTON DODGE LOGIC
+============================================================ */
+const taunts = [
+  "Are you sure Baby? 😏",
+  "Think again 😄",
+  "Don't do this babyyy 😢",
+  "You don't mean that! 🥺",
+  "Nope, wrong choice! 😤",
+  "Come on… 🙈",
+  "Try the other button baby 😇",
+  "Your heart says Yes! 💘"
+];
+let tauntIndex = 0;
+
+function dodgeNo() {
+  const btn    = document.getElementById('btn-no');
+  const taunt  = document.getElementById('no-taunt');
+
+  // Add dodging class to enable fixed positioning
+  if (!btn.classList.contains('dodging')) {
+    btn.classList.add('dodging');
+  }
+
+  const margin = 20;
+  const bw = btn.offsetWidth;
+  const bh = btn.offsetHeight;
+
+  // Pick a random safe position on screen
+  const newLeft = margin + Math.random() * (window.innerWidth  - bw - margin * 2);
+  const newTop  = margin + Math.random() * (window.innerHeight - bh - margin * 2);
+
+  btn.style.left = newLeft + 'px';
+  btn.style.top  = newTop  + 'px';
+
+  // Show taunt near button, keeping it within viewport
+  taunt.textContent = taunts[tauntIndex % taunts.length];
+  
+  const tauntWidth = 120; // Approximate width of taunt
+  let tauntLeft = newLeft + bw / 2 - tauntWidth / 2;
+  let tauntTop = newTop - 38;
+  
+  // Keep taunt within horizontal bounds
+  if (tauntLeft < margin) tauntLeft = margin;
+  if (tauntLeft + tauntWidth > window.innerWidth - margin) {
+    tauntLeft = window.innerWidth - tauntWidth - margin;
+  }
+  
+  // Keep taunt within vertical bounds
+  if (tauntTop < margin) tauntTop = newTop + bh + 10;
+  if (tauntTop > window.innerHeight - margin) {
+    tauntTop = window.innerHeight - 50;
+  }
+  
+  taunt.style.left  = tauntLeft + 'px';
+  taunt.style.top   = tauntTop + 'px';
+  taunt.classList.add('show');
+  tauntIndex++;
+
+  clearTimeout(window._tauntTimer);
+  window._tauntTimer = setTimeout(() => taunt.classList.remove('show'), 1800);
+}
+
+/* ============================================================
+   "YES" BUTTON — handleYes
+============================================================ */
+function handleYes() {
+  startConfetti();
+  sendTelegram();
+  setTimeout(() => {
+    document.getElementById('modal-overlay').classList.add('show');
+  }, 600);
+}
+
+/* ============================================================
+   CLOSE MODAL
+============================================================ */
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('show');
+}
+
+/* ============================================================
+   TELEGRAM NOTIFICATION
+============================================================ */
+function sendTelegram() {
+  const text = encodeURIComponent('Ruth accepted your proposal! ❤️🎉 She said YES!');
+  const url  = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${text}`;
+
+  fetch(url)
+    .then(r  => r.json())
+    .then(d  => console.log('Telegram sent ✅', d))
+    .catch(e => console.warn('Telegram error (check token/chat_id):', e));
+}
+
+/* ============================================================
+   CONFETTI ANIMATION
+============================================================ */
+function startConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx    = canvas.getContext('2d');
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const colors  = ['#ff4d6d','#ffb3c6','#fff000','#c9a84c','#ff8fa3','#ff006e','#fb5607','#ffbe0b','#8338ec'];
+  const pieces  = [];
+  const count   = 160;
+
+  // Spawn pieces
+  for (let i = 0; i < count; i++) {
+    pieces.push({
+      x:     Math.random() * canvas.width,
+      y:     Math.random() * canvas.height - canvas.height,
+      r:     4 + Math.random() * 6,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      tilt:  Math.random() * 10 - 10,
+      tiltSpeed: 0.1 + Math.random() * 0.1,
+      speed: 2 + Math.random() * 4,
+      shape: Math.random() > 0.5 ? 'rect' : 'heart'
+    });
+  }
+
+  let frame = 0;
+  const maxFrames = 300;
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    pieces.forEach(p => {
+      p.y     += p.speed;
+      p.tilt  += p.tiltSpeed;
+      p.x     += Math.sin(frame * 0.02 + p.tilt) * 0.8;
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate((p.tilt * Math.PI) / 180);
+      ctx.fillStyle = p.color;
+
+      if (p.shape === 'rect') {
+        ctx.fillRect(-p.r / 2, -p.r / 2, p.r, p.r * 1.4);
+      } else {
+        // Simple heart
+        const s = p.r * 0.3;
+        ctx.beginPath();
+        ctx.moveTo(0, s);
+        ctx.bezierCurveTo(-s * 2, -s, -s * 3.5, s, 0, s * 3);
+        ctx.bezierCurveTo(s * 3.5, s, s * 2, -s, 0, s);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      ctx.restore();
+
+      // Reset to top
+      if (p.y > canvas.height) {
+        p.y = -20;
+        p.x = Math.random() * canvas.width;
+      }
+    });
+
+    frame++;
+    if (frame < maxFrames) {
+      requestAnimationFrame(draw);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+
+  draw();
+}
+
+/* ============================================================
+   BACKGROUND MUSIC
+============================================================ */
+const music = document.getElementById("bg-music");
+
+document.getElementById("envelope").addEventListener("click", () => {
+    music.currentTime = 12;
+    music.volume = 0;
+    music.play();
+
+    let vol = 0;
+    const fade = setInterval(() => {
+        if (vol < 0.3) {
+            vol += 0.02;
+            music.volume = vol;
+        } else {
+            clearInterval(fade);
+        }
+    }, 200);
+});
+
+
+/* ============================================================
+   RESIZE HANDLER — keep No button in bounds
+============================================================ */
+window.addEventListener('resize', () => {
+  const canvas = document.getElementById('confetti-canvas');
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
+</body>
+</html>
